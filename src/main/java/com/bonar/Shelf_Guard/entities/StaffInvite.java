@@ -41,7 +41,7 @@ public class StaffInvite {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sent_by_staff_id", nullable = false)
-    private Account account;
+    private Users users;
 
     @Column(nullable = false)
     private Instant expiresAt;

@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @DiscriminatorValue("OWNER")
-public class BusinessOwner extends Account{
+public class BusinessOwner extends Users {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Set<Business> businesses = new HashSet<>();

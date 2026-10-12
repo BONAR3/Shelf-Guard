@@ -16,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "account_type")
-public abstract class Account {
+@DiscriminatorColumn(name = "entity_type")
+public abstract class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

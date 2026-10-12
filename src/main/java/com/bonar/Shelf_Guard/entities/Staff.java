@@ -18,7 +18,7 @@ import java.util.*;
 @NoArgsConstructor
 @ToString
 @DiscriminatorValue("STAFF")
-public class Staff extends Account {
+public class Staff extends Users {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "business_id", nullable = false)
@@ -37,7 +37,7 @@ public class Staff extends Account {
     private Map<Permission, PermissionType> permissionOverrides = new HashMap<>();
 
     @ManyToMany
-    @JoinTable(name = "user_location_link", joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "user_location_link", joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "location_id"))
     private Set<Location> locations = new HashSet<>();
 

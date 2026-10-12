@@ -1,8 +1,8 @@
-package com.bonar.Shelf_Guard.dto;
+package com.bonar.Shelf_Guard.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record LogInRequest (@NotBlank @Email String email,
-                            @NotBlank String password)
+public record LoginRequest(@NotBlank @Email String email,
+                           @NotBlank String password)
 {}
