@@ -1,6 +1,6 @@
 package com.bonar.Shelf_Guard.auth;
 
-import com.bonar.Shelf_Guard.exceptions.ErrorResponseHandler;
+import com.bonar.Shelf_Guard.exceptions.ErrorResponseWriter;
 import com.bonar.Shelf_Guard.service.LogInSessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,11 +25,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
     private final UsersDetailService usersDetailService;
     private final LogInSessionService loginSessionService;
-    private final ObjectMapper objectMapper;
+    private final ErrorResponseWriter errorResponseWriter;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -43,7 +43,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         try {
-
             TokenClaims claims = jwtService.extractTokenClaims(token);
 
             if (claims.getAccountId() == null || claims.getSessionId() == null) {
@@ -57,14 +56,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
             if (!userDetails.isEnabled() || !userDetails.isAccountNonLocked()) {
-                rejectRequest(response, "Account disabled");
-                loginSessionService.invalidateSession(UUID.fromString(claims.getAccountId()));
+                errorResponseWriter.write(response, HttpStatus.FORBIDDEN, "Account disabled");
                 return;
             }
 
             boolean sessionStillActive = loginSessionService.isCurrentSession(
                     UUID.fromString(claims.getAccountId()), claims.getSessionId());
-
             if (!sessionStillActive) {
                 rejectRequest(response, "Session no longer active");
                 return;
@@ -77,25 +74,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
-            filterChain.doFilter(request, response);
-
         } catch (ExpiredJwtException ex) {
             rejectRequest(response, "Token expired");
         } catch (UsernameNotFoundException ex) {
             rejectRequest(response, "Invalid token");
         } catch (JwtException ex) {
-            rejectRequest(response, "Invalid token");
+            logger.error("Unexpected error while authenticating request", ex);
+            errorResponseWriter.write(response, HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+            return;
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private void rejectRequest(HttpServletResponse response, String message) throws IOException {
-        ErrorResponseHandler error = ErrorResponseHandler.builder()
-                .statusCode(HttpServletResponse.SC_UNAUTHORIZED)
-                .message(message)
-                .build();
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write(objectMapper.writeValueAsString(error));
+        errorResponseWriter.write(response, HttpStatus.UNAUTHORIZED, message);
     }
 }
