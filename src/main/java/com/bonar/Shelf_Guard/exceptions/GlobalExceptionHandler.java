@@ -43,7 +43,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<Void> handleUnexpected(Exception ex) {
-        log.error("Unhandled exception", ex); // full detail in the log, never in the response
+        log.error("Unhandled exception", ex);
         return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ApiResponse<Void> handleConflict(ConflictException ex) {
+        return ApiResponse.error(HttpStatus.CONFLICT, ex.getMessage());
     }
 }

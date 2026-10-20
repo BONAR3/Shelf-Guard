@@ -51,6 +51,7 @@ public class LogInSessionService {
                 });
     }
 
+    @Transactional
     public void invalidateSession(UUID accountId) {
         sessionRepository.deleteByAccountId(accountId);
     }

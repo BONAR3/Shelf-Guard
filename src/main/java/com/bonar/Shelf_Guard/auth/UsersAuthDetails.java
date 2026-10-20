@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public record AccountAuthDetails(Users users) implements UserDetails {
+public record UsersAuthDetails(Users users) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

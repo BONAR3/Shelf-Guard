@@ -22,6 +22,6 @@ public class UsersDetailService implements UserDetailsService {
         if (account.isEmpty()) throw new UsernameNotFoundException("User not found!");
         Users user = account.get();
 
-        return new AccountAuthDetails(user);
+        return new UsersAuthDetails(user);
     }
 }
