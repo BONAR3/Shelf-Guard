@@ -1,10 +1,10 @@
 package com.bonar.Shelf_Guard.auth;
 
 import com.bonar.Shelf_Guard.dto.request.LoginRequest;
-import com.bonar.Shelf_Guard.dto.request.RegisterOwnerRequest;
+import com.bonar.Shelf_Guard.dto.request.NewOwnerRequest;
 import com.bonar.Shelf_Guard.dto.response.ApiResponse;
 import com.bonar.Shelf_Guard.dto.response.LoginResponse;
-import com.bonar.Shelf_Guard.service.OwnerRegistrationService;
+import com.bonar.Shelf_Guard.service.serviceInterface.BusinessOwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
-    private final OwnerRegistrationService ownerRegistrationService;
+    private final BusinessOwnerService businessOwnerService;
 
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -26,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/register/owner")
-    public ApiResponse<LoginResponse> registerOwner(@Valid @RequestBody RegisterOwnerRequest request) {
-        return ApiResponse.created("Account created", ownerRegistrationService.register(request));
+    public ApiResponse<LoginResponse> registerOwner(@Valid @RequestBody NewOwnerRequest request) {
+        return ApiResponse.created("Account created", authService.register(request));
     }
 
     @PostMapping("/logout")
