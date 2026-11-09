@@ -44,7 +44,7 @@ public class Business {
     @Column(name = "updated_a")
     private LocalDateTime updatedAt;
 
-    @Column(name = "created_at")
+    @Column(name = "deactivated_at")
     private LocalDateTime deactivatedAt;
 
 }
