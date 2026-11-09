@@ -5,8 +5,9 @@ import com.bonar.Shelf_Guard.entities.BusinessOwner;
 import com.bonar.Shelf_Guard.repository.BusinessOwnerRepo;
 import com.bonar.Shelf_Guard.service.serviceInterface.BusinessOwnerService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class BusinessOwnerServiceImpl implements BusinessOwnerService {
