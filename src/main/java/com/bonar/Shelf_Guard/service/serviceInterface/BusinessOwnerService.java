@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Service
 public interface BusinessOwnerService {
-    BusinessOwner getReference(UUID ownerId);
+
 }

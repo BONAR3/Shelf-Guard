@@ -5,6 +5,7 @@ import com.bonar.Shelf_Guard.dto.response.BusinessResponse;
 import com.bonar.Shelf_Guard.entities.Business;
 import com.bonar.Shelf_Guard.entities.BusinessOwner;
 import com.bonar.Shelf_Guard.enums.AccountStatus;
+import com.bonar.Shelf_Guard.exceptions.AccountNotFoundException;
 import com.bonar.Shelf_Guard.exceptions.ConflictException;
 import com.bonar.Shelf_Guard.repository.BusinessOwnerRepo;
 import com.bonar.Shelf_Guard.repository.BusinessRepository;
@@ -27,9 +28,10 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @Transactional
     public BusinessResponse createBusiness(UUID ownerId, NewBusinessRequest businessRequest) {
-        BusinessOwner owner = ownerRepo.getReferenceById(ownerId);
+        BusinessOwner owner = ownerRepo.findById(ownerId)
+                .orElseThrow(() -> new AccountNotFoundException("Owner not found"));
 
-        if (businessRepository.businessExists(businessRequest.name())) {
+        if (businessRepository.existsByBusinessName(businessRequest.name())) {
             throw new ConflictException("Business already exist");
         }
 

@@ -19,7 +19,7 @@ import java.util.Set;
 @DiscriminatorValue("OWNER")
 public class BusinessOwner extends Users {
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Business> businesses = new HashSet<>();
 
     @CreationTimestamp

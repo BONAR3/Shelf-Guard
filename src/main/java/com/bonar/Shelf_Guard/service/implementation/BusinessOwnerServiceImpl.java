@@ -12,12 +12,5 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BusinessOwnerServiceImpl implements BusinessOwnerService {
 
-    private final BusinessOwnerRepo ownerRepo;
-
-    @Override
-    @Transactional
-    public BusinessOwner getReference(UUID ownerId) {
-        return ownerRepo.getReferenceById(ownerId);
-    }
 
 }
