@@ -4,13 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
 @Data
 @Builder
-@RestControllerAdvice
 public class ApiResponse <T>{
     private HttpStatusCode statusCode;
     private String message;

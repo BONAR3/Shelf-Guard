@@ -22,7 +22,6 @@ import java.util.UUID;
 public class BusinessServiceImpl implements BusinessService {
     private final BusinessRepository businessRepository;
     private final BusinessOwnerRepo ownerRepo;
-    private final BusinessServiceImpl businessService;
     private final BusinessPinService pinService;
 
     @Override
